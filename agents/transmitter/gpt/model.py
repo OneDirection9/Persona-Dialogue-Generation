@@ -241,7 +241,7 @@ class Gpt2SeqModel(nn.Module):
                 if self.use_dis:
                     new_dis = self.pred_turn_tensor.repeat(batch_size).view(batch_size, -1)
                     past_dis = torch.cat([past_dis, new_dis], dim=1)
-                is_end = is_end | (predict_tok == self.end_idx).view(-1)
+                is_end = is_end.bool() | (predict_tok == self.end_idx).bool().view(-1)
                 if (~is_end).sum() == 0:
                     break
         return pred_output, hidden_states
@@ -309,7 +309,7 @@ class Gpt2SeqModel(nn.Module):
             if self.use_dis:
                 new_dis = self.pred_turn_tensor.repeat(batch_size).view(batch_size, -1)
                 past_dis = torch.cat([past_dis, new_dis], dim=1)
-            is_end = is_end | (predict_tok == self.end_idx).view(-1)
+            is_end = is_end.bool() | (predict_tok == self.end_idx).bool().view(-1)
             if (~is_end).sum() == 0:
                 break
         score_output = last_logits[..., src_len:, :].contiguous()
@@ -380,7 +380,7 @@ class Gpt2SeqModel(nn.Module):
             if self.use_dis:
                 new_dis = self.pred_turn_tensor.repeat(batch_size).view(batch_size, -1)
                 past_dis = torch.cat([past_dis, new_dis], dim=1)
-            is_end = is_end | (predict_tok == self.end_idx).view(-1)
+            is_end = is_end.bool() | (predict_tok == self.end_idx).bool().view(-1)
             if (~is_end).sum() == 0:
                 break
         score_output = last_logits[..., src_len:, :].contiguous()

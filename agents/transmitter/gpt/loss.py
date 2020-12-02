@@ -68,7 +68,7 @@ class LabelSmoothingLoss(nn.Module):
         smoothed_targets.scatter_(1, targets_flat.unsqueeze(1), self.confidence)
         # smoothed_targets: (batch_size * seq_len, vocabulary_size)
 
-        smoothed_targets.masked_fill_((targets_flat == self.pad_index).unsqueeze(1), 0)
+        smoothed_targets.masked_fill_((targets_flat == self.pad_index).unsqueeze(1).bool(), 0)
         # masked_targets: (batch_size * seq_len, vocabulary_size)
 
         loss = self.criterion(outputs_flat, smoothed_targets)
